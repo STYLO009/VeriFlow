@@ -1,0 +1,10 @@
+{
+  "description": "Detect suspicious UPI transactions, money mule networks, and collusion with real-time graph analysis, explainable risk insights, and investigation tools for financial security teams.",
+  "robots": {
+    "index": false
+  },
+  "accessibility": {
+    "addBypassLinks": false,
+    "ignoreReducedMotion": false
+  }
+}

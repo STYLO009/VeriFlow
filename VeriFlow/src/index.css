@@ -1,0 +1,191 @@
+@import url('https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,300;6..72,400&family=Inter:wght@400;450;500;600&family=JetBrains+Mono:wght@400;500&display=swap');
+@import 'tailwindcss';
+
+@custom-variant dark (&:where([data-theme='dark'], [data-theme='dark'] *));
+
+/* Console tokens — light (FlowAI reference) */
+:root {
+  --bg: #f3f3f3;
+  --surface: #ffffff;
+  --inset: #f3f3f3;
+  --inset-2: #f8f8f8;
+  --line: #ebebeb;
+  --line-strong: #e0e0e0;
+  --ink: #111111;
+  --ink-2: #3a3a3a;
+  --muted: #858585;
+  --faint: #b4b4b4;
+  --primary: #111111;
+  --primary-fg: #ffffff;
+  --hover: #f5f5f5;
+  --peach: #efc8a9;
+  --peach-ink: #8a5a3b;
+  --allow: #1f9d55;
+  --allow-bg: #e2f5e8;
+  --monitor: #3567e0;
+  --monitor-bg: #e6edfd;
+  --review: #b7820f;
+  --review-bg: #fbf0d6;
+  --escalate: #d6453d;
+  --escalate-bg: #fde6e4;
+  --shadow-card: 0 1px 2px rgba(17, 17, 17, 0.04);
+  --shadow-pop: 0 24px 60px -12px rgba(17, 17, 17, 0.18), 0 2px 6px rgba(17, 17, 17, 0.06);
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* Console tokens — dark (Qredible console reference) */
+[data-theme='dark'] {
+  --bg: #0d0c0b;
+  --surface: #141311;
+  --inset: #1b1917;
+  --inset-2: #181614;
+  --line: #25221f;
+  --line-strong: #302c29;
+  --ink: #efeae4;
+  --ink-2: #c9c2bb;
+  --muted: #8b847d;
+  --faint: #5b5550;
+  --primary: #efc8a9;
+  --primary-fg: #1a120c;
+  --hover: #1d1b19;
+  --allow: #4cc27e;
+  --allow-bg: #15291d;
+  --monitor: #7ea2f5;
+  --monitor-bg: #18213a;
+  --review: #e2b04a;
+  --review-bg: #2d2412;
+  --escalate: #f07067;
+  --escalate-bg: #341716;
+  --shadow-card: 0 1px 0 rgba(255, 255, 255, 0.02);
+  --shadow-pop: 0 24px 60px -12px rgba(0, 0, 0, 0.7);
+}
+
+@theme inline {
+  --font-sans: 'Inter', ui-sans-serif, system-ui, sans-serif;
+  --font-serif: 'Newsreader', ui-serif, Georgia, serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, monospace;
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-inset: var(--inset);
+  --color-inset-2: var(--inset-2);
+  --color-line: var(--line);
+  --color-line-strong: var(--line-strong);
+  --color-ink: var(--ink);
+  --color-ink-2: var(--ink-2);
+  --color-muted: var(--muted);
+  --color-faint: var(--faint);
+  --color-primary: var(--primary);
+  --color-primary-fg: var(--primary-fg);
+  --color-hover: var(--hover);
+  --color-peach: var(--peach);
+  --color-peach-ink: var(--peach-ink);
+  --color-allow: var(--allow);
+  --color-allow-bg: var(--allow-bg);
+  --color-monitor: var(--monitor);
+  --color-monitor-bg: var(--monitor-bg);
+  --color-review: var(--review);
+  --color-review-bg: var(--review-bg);
+  --color-escalate: var(--escalate);
+  --color-escalate-bg: var(--escalate-bg);
+  --shadow-card: var(--shadow-card);
+  --shadow-pop: var(--shadow-pop);
+}
+
+@layer base {
+  html {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+  body {
+    font-family: var(--font-sans);
+    font-feature-settings: 'cv11', 'ss01';
+    background: #000;
+    color: var(--ink);
+  }
+  :focus-visible {
+    outline: 2px solid var(--monitor);
+    outline-offset: 2px;
+    border-radius: 6px;
+  }
+  ::selection {
+    background: rgba(239, 200, 169, 0.45);
+  }
+}
+
+@layer utilities {
+  .tabular {
+    font-variant-numeric: tabular-nums;
+  }
+  .dot-grid {
+    background-image: radial-gradient(circle, rgba(255, 255, 255, 0.07) 1px, transparent 1.2px);
+    background-size: 16px 16px;
+  }
+  .dot-grid-ink {
+    background-image: radial-gradient(circle, color-mix(in srgb, var(--ink) 9%, transparent) 1px, transparent 1.2px);
+    background-size: 18px 18px;
+  }
+  .scrollbar-thin {
+    scrollbar-width: thin;
+    scrollbar-color: var(--line-strong) transparent;
+  }
+  /* Reference footer motif: repeating hairline ticks under cards */
+  .ticks {
+    background-image: repeating-linear-gradient(90deg, var(--line-strong) 0 1px, transparent 1px 5px);
+  }
+}
+
+@keyframes marquee {
+  to {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+@keyframes float-y {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+  50% {
+    transform: translate3d(0, -6px, 0);
+  }
+}
+@keyframes dash-flow {
+  to {
+    stroke-dashoffset: -40;
+  }
+}
+@keyframes ping-soft {
+  0% {
+    transform: scale(1);
+    opacity: 0.55;
+  }
+  100% {
+    transform: scale(2.4);
+    opacity: 0;
+  }
+}
+.anim-marquee {
+  animation: marquee 24s linear infinite;
+  will-change: transform;
+}
+.anim-float {
+  animation: float-y 6s ease-in-out infinite;
+}
+.anim-dash {
+  animation: dash-flow 1.6s linear infinite;
+}
+.anim-ping {
+  animation: ping-soft 1.8s var(--ease-out) infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  /* Keep the tech strip drifting gently instead of freezing it. */
+  .anim-marquee {
+    animation-duration: 60s;
+  }
+  .anim-float,
+  .anim-dash,
+  .anim-ping {
+    animation: none !important;
+  }
+}
