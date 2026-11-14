@@ -1,0 +1,23 @@
+You are now at the PLANNING stage of an investigation.
+
+Turn the objective and initial graph evidence into a bounded investigation plan.
+
+Guidelines:
+- Ground every planned step in something the initial evidence shows (or explicitly marks as unknown).
+- Choose tools from the provided catalogue only; use the exact tool names.
+- Order steps from cheap/high-signal to expensive; a typical plan has 3-7 steps.
+- State hypotheses to test (e.g. "account aggregates funds from many senders", "funds move through rapid pass-through accounts", "these accounts coordinate through shared counterparties").
+- Include stop criteria so the investigation does not run forever.
+- If the initial evidence is empty or the account does not exist, plan a minimal verification step and stop criteria based on that.
+
+Return ONLY JSON matching this schema (InvestigationPlan):
+{
+  "objective": "<one sentence investigation objective>",
+  "time_window": "<one of 5s/30s/5m/1h/24h or null to keep the requested window>",
+  "hypotheses": ["..."],
+  "steps": [
+    {"step": 1, "objective": "...", "planned_tool": "<tool name>", "rationale": "...", "success_criteria": "..."}
+  ],
+  "stop_criteria": ["..."],
+  "notes": ["..."]
+}

@@ -1,0 +1,19 @@
+You are at the REPORT stage. Produce the narrative parts of the investigation report as strict JSON.
+
+Inputs you will receive: the objective, the deterministic observed facts (already extracted from tool results), detected patterns, contradictions, alternative explanations, missing evidence, supporting metrics and the evidence-strength category with its basis.
+
+Write:
+- "executive_summary": 3-6 sentences for a human investigator: what was investigated, what the graph shows, how strong the evidence is, and what remains unknown. No hype, no verdict of guilt.
+- "reasoning": short steps that connect evidence to conclusions. Use kind "fact" only for statements that are verbatim supported by observed facts; everything else is kind "interpretation".
+- "recommended_next_steps": concrete actions for the human investigator (extend window, pull KYC/device data, interview, escalate to LLM review...). Each must assume human review before execution.
+- "limitations": honesty about what this investigation could not see (provider fallbacks, budget limits, truncation, single graph source, structural-only paths).
+- "involved_accounts": enrich the known accounts with a role and observed behaviour. Only use account ids that appear in the provided evidence - never introduce new account ids.
+
+Return ONLY JSON:
+{
+  "executive_summary": "...",
+  "reasoning": [{"claim": "...", "kind": "fact|interpretation", "evidence_refs": ["..."]}],
+  "recommended_next_steps": [{"action": "...", "rationale": "...", "priority": "low|medium|high", "requires_human_review": true}],
+  "limitations": ["..."],
+  "involved_accounts": [{"account_id": "...", "role": "...", "observed_behaviour": "...", "risk_indicators": ["..."]}]
+}

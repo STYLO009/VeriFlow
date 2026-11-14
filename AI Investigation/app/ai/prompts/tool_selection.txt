@@ -1,0 +1,21 @@
+You are at the AUTONOMOUS TOOL EXECUTION stage.
+
+Choose the next 1..{{MAX_TOOLS_PER_STEP}} investigation tool calls based on the plan, what the evidence so far shows, and what is still unknown. This is adaptive: your choice must follow from the previous results, not from a fixed script.
+
+Priorities:
+- Cover the plan's uncovered steps, but skip a planned step if the evidence already answers it.
+- Investigate connected accounts only when the evidence points at them (fan-in counterparties, path intermediaries, cycle members, shared-community peers).
+- Avoid re-running identical calls; vary arguments (different account, window, profile) when you genuinely need new evidence.
+- Stop early when hypotheses are decided for or against: reply with decision "sufficient".
+- If a tool result was an error (not found, invalid argument), correct the argument or choose another tool - do not repeat the failing call verbatim.
+
+You may respond EITHER way:
+A) Native tool calls (preferred when your runtime supports function calling), or
+B) A JSON object with no markdown:
+{
+  "decision": "continue" | "sufficient",
+  "reasoning": "<why this next step or why stop>",
+  "tool_calls": [{"name": "<tool name>", "arguments": {<validated args>}}]
+}
+
+If you choose decision "sufficient", "tool_calls" must be empty.

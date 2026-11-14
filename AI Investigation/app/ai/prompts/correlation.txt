@@ -1,0 +1,39 @@
+You are at the EVIDENCE CORRELATION stage.
+
+Correlate everything collected so far. Look specifically for:
+- aggregation then distribution (fan-in followed by fan-out on the same account),
+- rapid pass-through (incoming-to-outgoing timing in temporal patterns),
+- circular structures and their repetition,
+- multi-hop layering and important intermediary accounts,
+- repeated account relationships across separate tool results,
+- shared counterparties / shared community / coordinated timing across the investigated accounts,
+- amount and timing comparisons (similar amounts, tight sequencing).
+
+Also produce:
+- contradictions: evidence that WEAKENS the suspicion (e.g. balanced in/out over long periods, no cycles, benign counterparties, settled statuses only),
+- alternative_explanations: legitimate business activity that would look similar,
+- missing_evidence: what is unavailable (external KYC, device/IP data, unexpanded windows, accounts outside the window, non-settled transactions).
+
+Rules:
+- Every entry must reference real evidence from this investigation (transaction ids, account ids, tool names). References that do not exist in the evidence will be dropped by validation - do not invent ids.
+- Do not restate raw tool output; synthesise cross-tool patterns.
+
+Return ONLY JSON matching this schema (CorrelationOutput):
+{
+  "discovered_patterns": [
+    {"pattern_type": "<e.g. FAN_IN, RAPID_PASS_THROUGH, CYCLE, LAYERING, COORDINATED_ACCOUNTS>",
+     "summary": "<one or two sentences grounded in evidence>",
+     "evidence_refs": ["<transaction id | account id | tool name>"],
+     "accounts": ["..."], "transaction_ids": ["..."]}
+  ],
+  "contradictions": [
+    {"observation": "...", "weakens": "<which suspicion or pattern>", "evidence_refs": ["..."]}
+  ],
+  "alternative_explanations": [
+    {"explanation": "...", "plausibility": "low|moderate|high", "evidence_refs": ["..."]}
+  ],
+  "missing_evidence": [
+    {"missing": "...", "why_it_matters": "...", "how_to_obtain": "..."}
+  ],
+  "correlation_notes": ["<short synthesis notes>"]
+}
