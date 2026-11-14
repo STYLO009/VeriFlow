@@ -1,0 +1,170 @@
+// Hackmatrix Database Schema
+//
+// Storage ownership (per apps/docs/database-schema.md):
+//   PostgreSQL (this file, Node.js + Prisma exclusively): durable business records.
+//   Redis: live graph indexes and event streams. See the Redis Key Design section below.
+//
+// This schema is the production-reviewed version of the starter schema in
+// apps/docs/database-schema.md. Reversal constraints, audit fields, and relation
+// semantics have been reviewed and hardened for production use.
+
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum TransactionStatus {
+  PENDING
+  SUCCESS
+  FAILED
+  REVERSED
+}
+
+enum RiskDecisionType {
+  ALLOW
+  MONITOR
+  REVIEW
+  ESCALATE
+}
+
+model Account {
+  id             String   @id @default(uuid())
+  accountRef     String   @unique
+  accountAgeDays Int?
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  sentTransactions     Transaction[] @relation("Sender")
+  receivedTransactions Transaction[] @relation("Receiver")
+
+  @@index([accountRef])
+}
+
+model Transaction {
+  id                     String            @id @default(uuid())
+  transactionRef         String            @unique
+  senderId               String
+  receiverId             String
+  amountPaise            BigInt
+  eventTimestamp         DateTime
+  status                 TransactionStatus
+  originalTransactionRef String?
+  createdAt              DateTime          @default(now())
+  updatedAt              DateTime          @updatedAt
+
+  sender   Account @relation("Sender", fields: [senderId], references: [id])
+  receiver Account @relation("Receiver", fields: [receiverId], references: [id])
+
+  // Reversal link: reference-based to the original transaction's transactionRef.
+  // Kept as a reference (not a Prisma relation) so reversals remain resolvable
+  // even if the original row is soft-deleted or archived in the future.
+  originalTransaction  Transaction?  @relation("Reversal", fields: [originalTransactionRef], references: [transactionRef])
+  reversedTransactions Transaction[] @relation("Reversal")
+
+  @@index([senderId, eventTimestamp])
+  @@index([receiverId, eventTimestamp])
+  @@index([status, eventTimestamp])
+  @@index([originalTransactionRef])
+}
+
+model RiskDecision {
+  id             String           @id @default(uuid())
+  transactionRef String
+  riskScore      Float
+  decision       RiskDecisionType
+  modelVersion   String
+  evidence       Json
+  createdAt      DateTime         @default(now())
+
+  // One risk decision per transaction reference is implied by the business
+  // process; a unique index can be added here if a decision must be immutable
+  // and singular per transaction.
+  @@index([transactionRef])
+  @@index([createdAt])
+}
+
+model FraudSignal {
+  id                     String   @id @default(uuid())
+  transactionRef         String?
+  patternType            String
+  severity               String
+  involvedAccountIds     Json
+  evidenceTransactionIds Json
+  features               Json
+  createdAt              DateTime @default(now())
+
+  @@index([patternType])
+  @@index([createdAt])
+  @@index([transactionRef])
+}
+
+model ProcessingEvent {
+  id             String    @id @default(uuid())
+  eventRef       String    @unique
+  transactionRef String
+  eventType      String
+  status         String
+  attemptCount   Int       @default(0)
+  errorMessage   String?
+  createdAt      DateTime  @default(now())
+  processedAt    DateTime?
+
+  @@index([transactionRef])
+  @@index([status, createdAt])
+}
+
+model AccountRiskHistory {
+  id           String   @id @default(uuid())
+  accountRef   String
+  riskScore    Float
+  modelVersion String
+  evidence     Json
+  calculatedAt DateTime @default(now())
+
+  @@index([accountRef, calculatedAt])
+}
+
+// ============================================================================
+// Redis Key Design (Python owns graph computation; Node.js/Prisma owns PG only)
+// ============================================================================
+//
+// Keys (replace {account_id} / {transaction_id} with actual values):
+//
+//   graph:{account_id}:out   Sorted Set  — outgoing adjacency: member = target account id, score = eventTimestamp (ms)
+//   graph:{account_id}:in    Sorted Set  — incoming adjacency: member = source account id,  score = eventTimestamp (ms)
+//   account:{account_id}:metadata Hash   — account metadata (age, createdAt, risk tier, etc.)
+//   txn:{transaction_id}     String/JSON — transaction payload (idempotent write, TTL per retention policy)
+//   processed:{transaction_id} String   — idempotency marker; existence means the event was durably processed
+//   risk:{account_id}        Sorted Set  — risk scores over time: member = modelVersion:calculatedAt, score = riskScore
+//
+// Recommended structures and policies:
+//
+//   • Sorted Sets for adjacency indexes (graph:out / graph:in) so range queries
+//     by time are O(log N) and support graph traversal.
+//   • Hashes or JSON for metadata (account:metadata) and transaction payloads (txn:*).
+//   • Explicit retention policies: evict graph edges older than the configured
+//     retention window; TTL txn:* and processed:* keys after the reconciliation
+//     window; keep risk:* history for the model-version retention period.
+//   • Idempotency markers: write processed:{transaction_id} only after the
+//     corresponding PostgreSQL row is committed; check the marker before
+//     processing any event.
+//   • Atomic sender/receiver updates: update both graph:{senderId}:out and
+//     graph:{receiverId}:in in a single Redis pipeline/MULTI-EXEC block.
+//   • Prefer storing transaction IDs in sorted sets and the transaction payload
+//     separately (txn:*) to keep adjacency indexes compact.
+//
+// Consistency (Redis and PostgreSQL do NOT share a single atomic transaction):
+//
+//   • Idempotent event processing — guarded by processed:{transaction_id}.
+//   • Retry mechanisms with attemptCount/backoff on ProcessingEvent.
+//   • Dead-letter streams for events that exceed max attempts.
+//   • Pending-message recovery on worker restart.
+//   • Reconciliation jobs that diff PostgreSQL against Redis graph indexes.
+//   • Reversal compensation: reversing a transaction writes a REVERSED status
+//     row in PostgreSQL and updates both sender/receiver graph indexes.
+//   • Durable processing status — ProcessingEvent.status tracks PENDING /
+//     PROCESSING / COMPLETED / DEAD_LETTER across retries.
