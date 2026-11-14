@@ -6,6 +6,7 @@ Run:
 
 from __future__ import annotations
 
+import asyncio
 import logging
 import time
 from contextlib import asynccontextmanager
@@ -19,11 +20,13 @@ from starlette.exceptions import HTTPException as StarletteHTTPException
 from . import __version__
 from .api.routes import router
 from .config import GraphConfig
+from .dataset import DEFAULT_DATASET_PATH, ingest_dataset
 from .graph.builder import GraphBuilder
 from .graph.graph_store import GraphStore
 from .graph.models import GraphDomainError, LimitExceededError
 from .graph.temporal_graph import TemporalGraph
 from .intelligence.graph_analyzer import GraphAnalyzer
+from .streaming.consumer import RedisEventSource
 from .streaming.event_processor import GraphEventProcessor
 from .streaming.window_manager import WindowManager
 from .storage import GraphPersistenceService, create_repository
@@ -31,7 +34,12 @@ from .storage import GraphPersistenceService, create_repository
 logger = logging.getLogger("mulegraph")
 
 
-def create_services(config: GraphConfig | None = None) -> dict[str, Any]:
+def create_services(
+    config: GraphConfig | None = None,
+    *,
+    load_dataset: bool = False,
+    dataset_path: str | None = None,
+) -> dict[str, Any]:
     """Assemble the dependency graph of engine components (pure, testable)."""
     config = config or GraphConfig.from_env()
     store = GraphStore(config)
@@ -43,7 +51,7 @@ def create_services(config: GraphConfig | None = None) -> dict[str, Any]:
     persistence = GraphPersistenceService(store, repository)
     processor = GraphEventProcessor(builder, store, window_manager=windows, sink=None)
 
-    return {
+    services = {
         "config": config,
         "store": store,
         "builder": builder,
@@ -55,6 +63,11 @@ def create_services(config: GraphConfig | None = None) -> dict[str, Any]:
         "processor": processor,
         "counters": {"started_at": time.time(), "events": 0, "analyses": 0},
     }
+    if load_dataset:
+        summary = ingest_dataset(services, dataset_path or DEFAULT_DATASET_PATH)
+        services["dataset"] = summary
+        services["counters"]["events"] = int(summary["accepted"])
+    return services
 
 
 def create_app(services: dict[str, Any] | None = None) -> FastAPI:
@@ -65,7 +78,56 @@ def create_app(services: dict[str, Any] | None = None) -> FastAPI:
         logger.info(
             "MuleGraph graph engine starting (version %s)", __version__
         )
+        config: GraphConfig = services["config"]  # type: ignore[assignment]
+        processor = services["processor"]  # type: ignore[arg-type]
+
+        redis_task: asyncio.Task[None] | None = None
+        try:
+            source = RedisEventSource(
+                url=config.redis_url,
+                stream=config.redis_stream,
+                group=config.redis_group,
+                consumer=config.redis_consumer,
+                max_attempts=config.redis_max_attempts,
+                backoff_ms=config.redis_backoff_ms,
+            )
+            source.connect()
+
+            async def _redis_poll_loop() -> None:
+                logger.info("Redis stream consumer started: %s group=%s", config.redis_stream, config.redis_group)
+                source._running = True  # type: ignore[attr-defined]
+                while source._running:  # type: ignore[attr-defined]
+                    try:
+                        events = source.poll(batch_size=25)
+                        for event in events:
+                            try:
+                                processor.process(event)
+                                source.ack(event.event_id)
+                            except Exception as exc:  # pragma: no cover - keep loop alive
+                                logger.exception("failed to process redis event %s: %s", event.event_id, exc)
+                                try:
+                                    source.ack(event.event_id)
+                                except Exception:  # pragma: no cover
+                                    pass
+                        await asyncio.sleep(0.2)
+                    except asyncio.CancelledError:
+                        break
+                    except Exception as exc:  # pragma: no cover - transient redis errors
+                        logger.exception("redis poll loop error: %s", exc)
+                        await asyncio.sleep(1.0)
+
+            redis_task = asyncio.create_task(_redis_poll_loop())
+        except Exception as exc:  # pragma: no cover - redis may not be available
+            logger.warning("Redis stream consumer not started: %s", exc)
+
         yield
+
+        if redis_task is not None:
+            redis_task.cancel()
+            try:
+                await redis_task
+            except asyncio.CancelledError:
+                pass
         services["analyzer"].close()
         logger.info("MuleGraph graph engine stopped")
 
@@ -173,4 +235,6 @@ def create_app(services: dict[str, Any] | None = None) -> FastAPI:
     return app
 
 
-app = create_app()
+# The runnable API starts synchronized with the checked-in PaySim-derived data.
+# Unit tests call create_services() explicitly and remain isolated by default.
+app = create_app(create_services(load_dataset=True))

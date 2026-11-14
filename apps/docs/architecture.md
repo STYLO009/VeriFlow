@@ -170,15 +170,31 @@ Use atomic operations or Lua scripts when updating sender and receiver indexes.
 
 ## 8. Reliability
 
-- Implement idempotency.
-- Retry transient failures.
-- Recover pending Redis Stream messages.
-- Use dead-letter streams.
-- Handle out-of-order events.
-- Reconcile graph state against durable transaction records.
-- Preserve reversal history.
+- **Implemented:** Redis consumer group `graph-workers` consumes `transaction-outcomes`.
+- **Implemented:** messages are acknowledged with `XACK` only after graph processing succeeds.
+- **Implemented:** pending messages are recovered with `XAUTOCLAIM` after the configured idle delay.
+- **Implemented:** failed messages use bounded exponential retry/backoff.
+- **Implemented:** messages exceeding `REDIS_MAX_ATTEMPTS` are copied to `transaction-outcomes:dead-letter`.
+- **Implemented:** outcome processing uses event IDs and Redis idempotency markers.
+- **Planned:** out-of-order event policy, reconciliation jobs, and reversal compensation across all historical graph edges.
 
-Redis Streams do not provide application-level exactly-once processing. Consumers must be idempotent.
+Redis Streams do not provide application-level exactly-once processing. The Node.js consumer is therefore idempotent and uses explicit acknowledgement, retry, and dead-letter boundaries.
+
+## 9. Implementation Boundary
+
+The current infrastructure implementation intentionally includes only Redis stream reliability:
+
+| Capability | Status |
+|---|---|
+| Consumer groups | Implemented |
+| `XACK` acknowledgement | Implemented |
+| `XAUTOCLAIM` recovery | Implemented |
+| Retry/backoff | Implemented |
+| Dead-letter stream | Implemented |
+| Reconciliation jobs | Planned |
+| Out-of-order event policy | Planned |
+| Distributed tracing and metrics | Planned |
+| Production secret rotation | Planned |
 
 ## 9. Performance
 

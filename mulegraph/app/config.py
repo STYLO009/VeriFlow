@@ -90,6 +90,14 @@ class GraphConfig:
     # --- streaming ---------------------------------------------------------
     event_ttl_seconds: float = field(default_factory=lambda: _env_float("MULEGRAPH_EVENT_TTL_S", 0.0))
 
+    # --- redis stream consumer ---------------------------------------------
+    redis_url: str = field(default_factory=lambda: _env_str("MULEGRAPH_REDIS_URL", "redis://localhost:6379/0"))
+    redis_stream: str = field(default_factory=lambda: _env_str("MULEGRAPH_REDIS_STREAM", "transaction-outcomes"))
+    redis_group: str = field(default_factory=lambda: _env_str("MULEGRAPH_REDIS_GROUP", "mulegraph-workers"))
+    redis_consumer: str = field(default_factory=lambda: _env_str("MULEGRAPH_REDIS_CONSUMER", "mulegraph-worker"))
+    redis_max_attempts: int = field(default_factory=lambda: _env_int("MULEGRAPH_REDIS_MAX_ATTEMPTS", 5))
+    redis_backoff_ms: float = field(default_factory=lambda: _env_float("MULEGRAPH_REDIS_BACKOFF_MS", 1000.0))
+
     # --- api ---------------------------------------------------------------
     default_time_window: str = field(default_factory=lambda: _env_str("MULEGRAPH_DEFAULT_WINDOW", "5m"))
     default_profile: str = field(default_factory=lambda: _env_str("MULEGRAPH_DEFAULT_PROFILE", "STANDARD"))

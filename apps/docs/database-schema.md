@@ -224,3 +224,19 @@ Implement:
 - Reconciliation jobs
 - Reversal compensation
 - Durable processing status
+
+### Current Redis stream implementation
+
+The Node.js backend currently implements the following reliability controls for
+the `transaction-outcomes` stream:
+
+- Consumer group: `graph-workers`
+- Consumer acknowledgement: `XACK` after successful graph synchronization
+- Pending recovery: `XAUTOCLAIM`
+- Retry counter: `stream:retry:{stream}:{message_id}`
+- Exponential retry delay controlled by `REDIS_RETRY_BASE_DELAY_MS`
+- Maximum attempts controlled by `REDIS_MAX_ATTEMPTS`
+- Dead-letter stream: `transaction-outcomes:dead-letter`
+
+Reconciliation jobs, out-of-order event policy, and full reversal compensation
+remain planned work and must not be treated as implemented guarantees.

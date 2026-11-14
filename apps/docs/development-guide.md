@@ -152,6 +152,13 @@ DATABASE_URL=postgresql://postgres:password@localhost:5432/muleshield
 
 REDIS_URL=redis://localhost:6379/0
 
+REDIS_STREAM_NAME=transaction-outcomes
+REDIS_DEAD_LETTER_STREAM=transaction-outcomes:dead-letter
+REDIS_CONSUMER_GROUP=graph-workers
+REDIS_CONSUMER_NAME=backend-local
+REDIS_MAX_ATTEMPTS=5
+REDIS_RETRY_BASE_DELAY_MS=1000
+
 GRAPH_ENGINE_URL=http://localhost:8000
 GRAPH_ENGINE_API_KEY=replace-with-local-secret
 
@@ -164,6 +171,10 @@ RISK_MODEL_VERSION=rules-v1
 ```
 
 Validate environment variables when each service starts.
+
+The local development setup uses the existing external PostgreSQL URL from
+`apps/Backend/.env`; PostgreSQL is not started by Docker Compose. Redis is the
+only stateful infrastructure service started locally by Docker.
 
 ## 7. Suggested Root Package Configuration
 

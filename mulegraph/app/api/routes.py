@@ -17,7 +17,7 @@ from ..algorithms.cycle_detection import find_cycles
 from ..algorithms.multi_hop import trace_money_flow
 from ..config import WINDOW_PRESETS
 from ..graph.adjacency_index import Window
-from ..graph.models import GraphDomainError, LimitExceededError
+from ..graph.models import GraphDomainError, LimitExceededError, format_timestamp
 from .schemas import (
     AccountSummaryResponse,
     AnalyzeRequest,
@@ -51,6 +51,48 @@ def _paginate(items: list[Any], page: int, page_size: int) -> tuple[list[Any], i
     return items[start : start + page_size], total_pages
 
 
+def _latest_timestamp(store: Any, account_id: str | None = None) -> float | None:
+    """Use the latest loaded event as the anchor for historical datasets."""
+    if account_id is not None:
+        node = store.graph.nodes.get(account_id)
+        return None if node is None else node.get("last_seen")
+    timestamps = [data.get("last_seen") for _, data in store.graph.nodes(data=True)]
+    timestamps = [ts for ts in timestamps if ts is not None]
+    return max(timestamps, default=None)
+
+
+def _data_window(store: Any, window: str, account_id: str | None = None) -> Window:
+    return Window.preset(window, reference=_latest_timestamp(store, account_id))
+
+
+@router.get("/transactions", summary="List graph transactions for network views")
+def transactions(
+    page: int = Query(1, ge=1),
+    page_size: int = Query(100, ge=1, le=1000),
+    services: dict[str, Any] = Depends(get_services),
+) -> dict[str, Any]:
+    """Expose the loaded PaySim/event graph using the Node API shape."""
+    records = sorted(services["store"].transactions.values(), key=lambda item: item.created_at, reverse=True)
+    total = len(records)
+    start = (page - 1) * page_size
+    items = []
+    for record in records[start : start + page_size]:
+        items.append(
+            {
+                "id": record.transaction_id,
+                "transactionRef": record.transaction_id,
+                "amountPaise": str(round(record.amount * 100)),
+                "currency": record.currency,
+                "eventTimestamp": format_timestamp(record.created_at),
+                "status": "SUCCESS" if record.is_settled else record.status.value,
+                "sender": {"accountRef": record.source_account},
+                "receiver": {"accountRef": record.destination_account},
+                "metadata": record.original_event.metadata,
+            }
+        )
+    return {"items": items, "page": page, "pageSize": page_size, "total": total, "totalPages": max(1, math.ceil(total / page_size))}
+
+
 # --------------------------------------------------------------------- #
 # analysis
 # --------------------------------------------------------------------- #
@@ -73,7 +115,6 @@ def ingest(payload: TransactionIngestRequest, services: dict[str, Any] = Depends
     if not events:
         raise GraphDomainError("no events supplied: provide 'event' or 'events'")
 
-    builder = services["builder"]
     repository = services["repository"]
     processor = services["processor"]
 
@@ -81,16 +122,12 @@ def ingest(payload: TransactionIngestRequest, services: dict[str, Any] = Depends
     accepted = 0
     duplicates = 0
     for event in events:
-        result = builder.build(event)
+        result = processor.process(event)
         if result.accepted:
             repository.append(event)
-        if result.action == "duplicate":
-            duplicates += 1
-        if result.accepted:
             accepted += 1
-        # streaming-compatible fast analysis after every accepted event
-        if processor is not None and result.accepted:
-            processor.on_event(event)
+        elif result.action == "duplicate":
+            duplicates += 1
         results.append(
             IngestEventResult(
                 event_id=result.event_id,
@@ -101,6 +138,8 @@ def ingest(payload: TransactionIngestRequest, services: dict[str, Any] = Depends
                 detail=result.detail,
             )
         )
+
+    services["counters"]["events"] += accepted
 
     status = "accepted" if accepted == len(events) else ("partial" if accepted else "empty")
     return IngestResponse(
@@ -123,7 +162,7 @@ def account(
     services: dict[str, Any] = Depends(get_services),
 ) -> AccountSummaryResponse:
     store = services["store"]
-    resolved = Window.preset(window)
+    resolved = _data_window(store, window, account_id)
     exists = store.has_account(account_id)
     data = store.graph.nodes.get(account_id, {})
     records = store.transactions_for_account(account_id, resolved) if exists else []
@@ -158,7 +197,7 @@ def neighborhood(
     store = services["store"]
     if not store.has_account(account_id):
         raise LookupError(f"account {account_id} not found")
-    view = extract_subgraph(store, account_id, hops=hops, window=Window.preset(window))
+    view = extract_subgraph(store, account_id, hops=hops, window=_data_window(store, window, account_id))
     payload = view.to_dict()
     return NeighborhoodResponse(
         account_id=account_id,
@@ -216,7 +255,7 @@ def account_transactions(
     services: dict[str, Any] = Depends(get_services),
 ) -> AccountSummaryResponse:
     store = services["store"]
-    resolved = Window.preset(window)
+    resolved = _data_window(store, window, account_id)
     if not store.has_account(account_id):
         raise LookupError(f"account {account_id} not found")
     records = store.transactions_for_account(account_id, resolved)
@@ -255,7 +294,7 @@ def trace(
     chronological: bool = Query(False, description="Require non-decreasing timestamps"),
     services: dict[str, Any] = Depends(get_services),
 ) -> TraceResponse:
-    resolved = Window.preset(window) if window else None
+    resolved = _data_window(services["store"], window) if window else None
     result = trace_money_flow(
         services["store"],
         source_id,
@@ -288,7 +327,7 @@ def cycles(
 ) -> CyclesResponse:
     result = find_cycles(
         services["store"],
-        window=Window.preset(window),
+        window=_data_window(services["store"], window),
         min_length=min_length,
         max_length=max_length,
     )
@@ -311,7 +350,7 @@ def communities(
     services: dict[str, Any] = Depends(get_services),
 ) -> CommunitiesResponse:
     analyzer = services["analyzer"]
-    resolved = Window.preset(window)
+    resolved = _data_window(services["store"], window)
     scan = analyzer._communities_for(resolved)  # cached + background refreshed
     items, total_pages = _paginate([c.to_dict() for c in scan.communities], page, page_size)
     filtered = [c for c in items if c["size"] >= min_size]
@@ -333,7 +372,7 @@ def metrics(
     services: dict[str, Any] = Depends(get_services),
 ) -> MetricsResponse:
     analyzer = services["analyzer"]
-    resolved = Window.preset(window)
+    resolved = _data_window(services["store"], window)
     scan = analyzer._centrality_for(resolved)  # cached + background refreshed
     payload = scan.to_dict(include_all=account_id is None)
     scoped = {account_id: scan.for_account(account_id)} if account_id else payload["metrics"]

@@ -31,6 +31,79 @@ enum RiskDecisionType {
   ESCALATE
 }
 
+enum UserRole {
+  SUPER_ADMIN
+  FRAUD_ANALYST
+  INVESTIGATOR
+  COMPLIANCE_OFFICER
+  AUDITOR_VIEWER
+}
+
+model User {
+  id           String   @id @default(uuid())
+  email        String   @unique
+  passwordHash String
+  role         UserRole @default(FRAUD_ANALYST)
+  isActive     Boolean  @default(true)
+  lastLoginAt  DateTime?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  investigationCases InvestigationCase[] @relation("CaseAssignee")
+  createdCases       InvestigationCase[] @relation("CaseCreator")
+  auditLogs          AuditLog[]          @relation("AuditActor")
+
+  @@index([isActive, createdAt])
+}
+
+enum InvestigationCaseStatus {
+  OPEN
+  IN_REVIEW
+  ESCALATED
+  RESOLVED
+  CLOSED
+}
+
+model InvestigationCase {
+  id              String                 @id @default(uuid())
+  caseRef         String                 @unique
+  title           String
+  description     String?
+  status          InvestigationCaseStatus @default(OPEN)
+  priority        String                 @default("MEDIUM")
+  accountRefs     Json
+  transactionRefs Json
+  findings        Json?
+  assigneeId      String?
+  createdById     String
+  resolvedAt      DateTime?
+  createdAt       DateTime               @default(now())
+  updatedAt       DateTime               @updatedAt
+
+  assignee  User? @relation("CaseAssignee", fields: [assigneeId], references: [id])
+  createdBy User  @relation("CaseCreator", fields: [createdById], references: [id])
+
+  @@index([status, priority, createdAt])
+  @@index([assigneeId, status])
+}
+
+model AuditLog {
+  id         String   @id @default(uuid())
+  actorId    String?
+  action     String
+  resource   String
+  resourceId String?
+  metadata   Json?
+  requestId  String?
+  createdAt  DateTime @default(now())
+
+  actor User? @relation("AuditActor", fields: [actorId], references: [id])
+
+  @@index([actorId, createdAt])
+  @@index([resource, resourceId, createdAt])
+  @@index([action, createdAt])
+}
+
 model Account {
   id             String   @id @default(uuid())
   accountRef     String   @unique

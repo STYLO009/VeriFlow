@@ -1,0 +1,76 @@
+name: hackmatrix
+
+services:
+  redis:
+    image: redis:7-alpine
+    command: ["redis-server", "--appendonly", "yes"]
+    ports:
+      - "${REDIS_PORT:-6379}:6379"
+    volumes:
+      - redis-data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+    restart: unless-stopped
+
+  mulegraph:
+    build:
+      context: ./mulegraph
+      dockerfile: Dockerfile
+    environment:
+      MULEGRAPH_BACKGROUND_ANALYSIS: ${MULEGRAPH_BACKGROUND_ANALYSIS:-1}
+      MULEGRAPH_DEFAULT_WINDOW: ${MULEGRAPH_DEFAULT_WINDOW:-5m}
+      MULEGRAPH_REDIS_URL: redis://redis:6379/0
+      MULEGRAPH_REDIS_STREAM: transaction-outcomes
+      MULEGRAPH_REDIS_GROUP: mulegraph-workers
+      MULEGRAPH_REDIS_CONSUMER: mulegraph-worker
+      MULEGRAPH_REDIS_MAX_ATTEMPTS: 5
+      MULEGRAPH_REDIS_BACKOFF_MS: 1000
+    ports:
+      - "${GRAPH_ENGINE_PORT:-8000}:8000"
+    depends_on:
+      redis:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/health')"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    restart: unless-stopped
+
+  backend:
+    build:
+      context: .
+      dockerfile: apps/Backend/Dockerfile
+    env_file:
+      - ./apps/Backend/.env
+    environment:
+      NODE_ENV: ${NODE_ENV:-development}
+      PORT: 4000
+      FRONTEND_URL: ${FRONTEND_URL:-http://localhost:5173}
+      REDIS_URL: redis://redis:6379/0
+      GRAPH_ENGINE_URL: http://mulegraph:8000
+      GRAPH_ENGINE_TIMEOUT_MS: ${GRAPH_ENGINE_TIMEOUT_MS:-8000}
+      JWT_SECRET: ${JWT_SECRET:-hackmatrix-local-development-jwt-secret-change-me}
+      JWT_EXPIRES_IN: ${JWT_EXPIRES_IN:-7d}
+      BCRYPT_SALT_ROUNDS: ${BCRYPT_SALT_ROUNDS:-10}
+      OUTCOME_API_KEY: ${OUTCOME_API_KEY:-hackmatrix-local-outcome-key-change-me}
+    ports:
+      - "${BACKEND_PORT:-4000}:4000"
+    depends_on:
+      redis:
+        condition: service_healthy
+      mulegraph:
+        condition: service_healthy
+    command: ["sh", "-c", "bunx prisma migrate deploy && bun run start"]
+    healthcheck:
+      test: ["CMD", "wget", "--spider", "--quiet", "http://127.0.0.1:4000/api/v1/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    restart: unless-stopped
+
+volumes:
+  redis-data:

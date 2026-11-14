@@ -50,6 +50,8 @@ class ProcessingResult:
     analysis: dict[str, Any] = field(default_factory=dict)
     published: bool = False
     elapsed_ms: float = 0.0
+    graph_version: int = 0
+    detail: str = ""
 
 
 class GraphEventProcessor:
@@ -91,6 +93,8 @@ class GraphEventProcessor:
                 accepted=False,
                 action="duplicate",
                 elapsed_ms=_ms(started),
+                graph_version=result.graph_version,
+                detail=result.detail,
             )
 
         if not result.accepted:
@@ -101,6 +105,8 @@ class GraphEventProcessor:
                 action=result.action,
                 analysis={"detail": result.detail},
                 elapsed_ms=_ms(started),
+                graph_version=result.graph_version,
+                detail=result.detail,
             )
 
         # --- temporal indexes -------------------------------------------
@@ -143,6 +149,8 @@ class GraphEventProcessor:
             analysis=analysis,
             published=published,
             elapsed_ms=_ms(started),
+            graph_version=result.graph_version,
+            detail=result.detail,
         )
 
     # alias used by the HTTP ingestion route (counter only, no re-analysis)

@@ -3,6 +3,7 @@
 from .consumer import (
     KafkaEventSource,
     ListEventSource,
+    RedisEventSource,
     SyntheticEventSource,
     run_stream,
 )
@@ -15,6 +16,7 @@ __all__ = [
     "KafkaEventSource",
     "ListEventSource",
     "ProcessingResult",
+    "RedisEventSource",
     "SyntheticEventSource",
     "WindowManager",
     "run_stream",

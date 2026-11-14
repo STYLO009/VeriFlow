@@ -149,6 +149,8 @@ class GraphAnalyzer:
         profile = AnalysisProfile(profile or self.config.default_profile)
         started = time.perf_counter()
         window_name = window
+        if reference is None and self.store.has_account(account_id):
+            reference = self.store.graph.nodes[account_id].get("last_seen")
         resolved = Window.preset(window, reference)
         budget = self._budget_for(profile)
         algorithms: list[str] = []

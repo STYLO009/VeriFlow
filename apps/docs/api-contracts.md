@@ -204,3 +204,54 @@ Possible error codes:
 
 The payment outcome endpoint must be restricted to a trusted payment-event source, not ordinary frontend users.
 
+## 10. Authentication and roles
+
+Authentication endpoints:
+
+```text
+POST /api/v1/auth/register
+POST /api/v1/auth/login
+GET  /api/v1/auth/me
+```
+
+The API uses bearer JWTs. The supported roles are:
+
+| Role | Scope |
+|---|---|
+| `SUPER_ADMIN` | Full platform, user, role, configuration and audit access |
+| `FRAUD_ANALYST` | Risk evaluation, alerts, transactions and outcome processing |
+| `INVESTIGATOR` | Graph evidence, accounts, transactions and investigation cases |
+| `COMPLIANCE_OFFICER` | Investigation cases, findings and audit records |
+| `AUDITOR_VIEWER` | Read-only dashboards, transactions, risks and audit logs |
+
+The first registered user is bootstrapped as `SUPER_ADMIN`.
+
+## 11. Investigation and audit endpoints
+
+```text
+GET   /api/v1/cases
+POST  /api/v1/cases
+GET   /api/v1/cases/:id
+PATCH /api/v1/cases/:id
+GET   /api/v1/audit-logs
+```
+
+Case writes are limited to `SUPER_ADMIN`, `INVESTIGATOR`, and
+`COMPLIANCE_OFFICER`. Audit-log reads are limited to `SUPER_ADMIN`,
+`COMPLIANCE_OFFICER`, and `AUDITOR_VIEWER`.
+
+## 12. Implemented stream reliability
+
+The outcome stream uses a Redis consumer group and bounded failure handling:
+
+- Stream: `transaction-outcomes`
+- Consumer group: `graph-workers`
+- Acknowledgement: `XACK` after successful processing
+- Pending recovery: `XAUTOCLAIM`
+- Retry count: `REDIS_MAX_ATTEMPTS`
+- Backoff base: `REDIS_RETRY_BASE_DELAY_MS`
+- Dead-letter stream: `transaction-outcomes:dead-letter`
+
+Reconciliation jobs and out-of-order event policy are not implemented and are
+explicitly future work.
+

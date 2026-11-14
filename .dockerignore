@@ -1,0 +1,11 @@
+.git
+.turbo
+node_modules
+**/node_modules
+**/.env
+**/__pycache__
+**/*.pyc
+**/generated/prisma
+apps/Backend/dist
+coverage
+*.log
