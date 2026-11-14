@@ -1,0 +1,200 @@
+{
+  "analysis_id": "GRAPH-23BA23D4",
+  "analysis_status": "completed",
+  "target_account": "ACC-7001",
+  "target_transaction": null,
+  "time_window": "5m",
+  "profile": "FAST",
+  "graph_summary": {
+    "nodes": 3,
+    "edges": 4,
+    "incoming_transactions": 2,
+    "outgoing_transactions": 2,
+    "non_settled_transactions": 0,
+    "unique_incoming_accounts": 1,
+    "unique_outgoing_accounts": 1,
+    "incoming_amount": 100000.0,
+    "outgoing_amount": 100000.0
+  },
+  "detected_patterns": [],
+  "money_flow_paths": [],
+  "communities": [],
+  "centrality_metrics": {},
+  "connected_accounts": [
+    {
+      "account_id": "ACC-7003",
+      "directions": [
+        "IN"
+      ],
+      "transactions": 2,
+      "settled_transactions": 2,
+      "total_amount": 100000.0,
+      "last_timestamp": 1794634650.182,
+      "transaction_ids": [
+        "TX-DEMO-16",
+        "TX-DEMO-19"
+      ],
+      "settled": true
+    },
+    {
+      "account_id": "ACC-7002",
+      "directions": [
+        "OUT"
+      ],
+      "transactions": 2,
+      "settled_transactions": 2,
+      "total_amount": 100000.0,
+      "last_timestamp": 1794634644.182,
+      "transaction_ids": [
+        "TX-DEMO-14",
+        "TX-DEMO-17"
+      ],
+      "settled": true
+    }
+  ],
+  "graph_evidence": [
+    {
+      "kind": "GRAPH_FACT",
+      "label": "ACCOUNT_ACTIVITY",
+      "details": {
+        "nodes": 3,
+        "edges": 4,
+        "incoming_transactions": 2,
+        "outgoing_transactions": 2,
+        "non_settled_transactions": 0,
+        "unique_incoming_accounts": 1,
+        "unique_outgoing_accounts": 1,
+        "incoming_amount": 100000.0,
+        "outgoing_amount": 100000.0
+      },
+      "source_algorithm": "graph_store",
+      "explanation": "Observed 2 incoming and 2 outgoing settled transactions for ACC-7001 in the selected window.",
+      "transaction_ids": [
+        "TX-DEMO-16",
+        "TX-DEMO-19",
+        "TX-DEMO-14",
+        "TX-DEMO-17"
+      ],
+      "parameters": {},
+      "evidence_id": "EV-ACC-7001-0002-001"
+    },
+    {
+      "kind": "RISK_INTERPRETATION",
+      "label": "GRAPH_RISK_SCORE",
+      "details": {
+        "account_id": "ACC-7001",
+        "score": 0.0572,
+        "severity": "LOW",
+        "signals": [
+          {
+            "signal": "fan_in",
+            "value": 0.155,
+            "weight": 0.22,
+            "contribution": 0.0341,
+            "observed": {
+              "unique_incoming_accounts": 1,
+              "incoming_transactions": 2,
+              "total_amount": 100000.0
+            }
+          },
+          {
+            "signal": "fan_out",
+            "value": 0.105,
+            "weight": 0.22,
+            "contribution": 0.0231,
+            "observed": {
+              "unique_outgoing_accounts": 1,
+              "outgoing_transactions": 2,
+              "total_amount": 100000.0
+            }
+          }
+        ]
+      },
+      "source_algorithm": "risk_engine",
+      "explanation": "No elevated graph signals detected for this account.",
+      "transaction_ids": [],
+      "parameters": {},
+      "evidence_id": "EV-ACC-7001-0002-002"
+    }
+  ],
+  "risk_assessment": {
+    "account_id": "ACC-7001",
+    "score": 0.0572,
+    "severity": "LOW",
+    "signals": [
+      {
+        "signal": "fan_in",
+        "value": 0.155,
+        "weight": 0.22,
+        "contribution": 0.0341,
+        "observed": {
+          "unique_incoming_accounts": 1,
+          "incoming_transactions": 2,
+          "total_amount": 100000.0
+        }
+      },
+      {
+        "signal": "fan_out",
+        "value": 0.105,
+        "weight": 0.22,
+        "contribution": 0.0231,
+        "observed": {
+          "unique_outgoing_accounts": 1,
+          "outgoing_transactions": 2,
+          "total_amount": 100000.0
+        }
+      }
+    ],
+    "signal_weights": {
+      "fan_in": 0.22,
+      "fan_out": 0.22,
+      "circular_transactions": 0.18,
+      "repeated_circular": 0.08,
+      "temporal_motifs": 0.14,
+      "risk_propagation": 0.08,
+      "community_concentration": 0.05,
+      "centrality_bridge": 0.03
+    },
+    "explanations": [
+      "No elevated graph signals detected for this account."
+    ],
+    "scoring_parameters": {
+      "signal_weights": {
+        "fan_in": 0.22,
+        "fan_out": 0.22,
+        "circular_transactions": 0.18,
+        "repeated_circular": 0.08,
+        "temporal_motifs": 0.14,
+        "risk_propagation": 0.08,
+        "community_concentration": 0.05,
+        "centrality_bridge": 0.03
+      }
+    },
+    "disclaimer": "Rule-based graph triage score derived from observed transaction patterns. It is not a legal or behavioural verdict and connection to flagged accounts alone is not proof of wrongdoing."
+  },
+  "analysis_metadata": {
+    "algorithms_executed": [
+      "fan_detection.detect_fan_in",
+      "fan_detection.detect_fan_out",
+      "graph_store.neighborhood",
+      "risk_engine.assess"
+    ],
+    "execution_time_ms": 0.52,
+    "graph_version": 44,
+    "engine_version": "1",
+    "budget": {
+      "visits": 2,
+      "exhausted": false,
+      "exhausted_reason": null,
+      "remaining_ms": 499.5
+    },
+    "notes": [],
+    "evidence_digest": "c759e00dd057",
+    "generated_at": "2026-11-14T05:38:19.336298+00:00",
+    "cache_status": {
+      "communities": {},
+      "centrality": {}
+    }
+  },
+  "subgraph": null
+}

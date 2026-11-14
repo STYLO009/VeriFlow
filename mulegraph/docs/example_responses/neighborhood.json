@@ -1,0 +1,82 @@
+{
+  "account_id": "ACC-7001",
+  "hops": 1,
+  "time_window": "5m",
+  "node_count": 3,
+  "edge_count": 4,
+  "truncated": false,
+  "nodes": [
+    {
+      "account_id": "ACC-7001",
+      "first_seen": 1794634619.182,
+      "last_seen": 1794634650.182,
+      "in_degree": 2,
+      "out_degree": 2,
+      "unique_in": 1,
+      "unique_out": 1,
+      "is_target": true
+    },
+    {
+      "account_id": "ACC-7002",
+      "first_seen": 1794634619.182,
+      "last_seen": 1794634647.182,
+      "in_degree": 2,
+      "out_degree": 2,
+      "unique_in": 1,
+      "unique_out": 1,
+      "is_target": false
+    },
+    {
+      "account_id": "ACC-7003",
+      "first_seen": 1794634622.182,
+      "last_seen": 1794634650.182,
+      "in_degree": 2,
+      "out_degree": 2,
+      "unique_in": 1,
+      "unique_out": 1,
+      "is_target": false
+    }
+  ],
+  "edges": [
+    {
+      "transaction_id": "TX-DEMO-14",
+      "source": "ACC-7001",
+      "destination": "ACC-7002",
+      "amount": 50000.0,
+      "currency": "INR",
+      "timestamp": 1794634619.182,
+      "status": "COMPLETED",
+      "settled": true
+    },
+    {
+      "transaction_id": "TX-DEMO-16",
+      "source": "ACC-7003",
+      "destination": "ACC-7001",
+      "amount": 50000.0,
+      "currency": "INR",
+      "timestamp": 1794634625.182,
+      "status": "COMPLETED",
+      "settled": true
+    },
+    {
+      "transaction_id": "TX-DEMO-17",
+      "source": "ACC-7001",
+      "destination": "ACC-7002",
+      "amount": 50000.0,
+      "currency": "INR",
+      "timestamp": 1794634644.182,
+      "status": "COMPLETED",
+      "settled": true
+    },
+    {
+      "transaction_id": "TX-DEMO-19",
+      "source": "ACC-7003",
+      "destination": "ACC-7001",
+      "amount": 50000.0,
+      "currency": "INR",
+      "timestamp": 1794634650.182,
+      "status": "COMPLETED",
+      "settled": true
+    }
+  ]
+}

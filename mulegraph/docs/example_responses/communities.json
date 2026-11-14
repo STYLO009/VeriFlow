@@ -1,0 +1,94 @@
+{
+  "time_window": "5m",
+  "community_count": 3,
+  "algorithm": "louvain",
+  "communities": [
+    {
+      "community_id": "COMM-001",
+      "members": [
+        "ACC-8100",
+        "ACC-8101",
+        "ACC-8102",
+        "ACC-8103",
+        "ACC-8104",
+        "ACC-8105",
+        "ACC-8106",
+        "ACC-8200",
+        "ACC-8201",
+        "ACC-8202",
+        "ACC-8203",
+        "ACC-8204",
+        "ACC-8205",
+        "ACC-9001"
+      ],
+      "size": 14,
+      "internal_transactions": 13,
+      "internal_volume": 185250.0,
+      "external_transactions": 0,
+      "external_volume": 0.0,
+      "connectivity": 0.1429,
+      "repeated_interactions": 0,
+      "volume_concentration": 0.2694,
+      "suspicious_concentration": false,
+      "internal_volume_share": 1.0,
+      "largest_member_by_volume": "ACC-9001",
+      "window": {
+        "start": 1794634399.3970442,
+        "end": 1794634699.3970451,
+        "duration_seconds": 300.0000009536743
+      }
+    },
+    {
+      "community_id": "COMM-002",
+      "members": [
+        "ACC-6001",
+        "ACC-6002",
+        "ACC-6003",
+        "ACC-6004"
+      ],
+      "size": 4,
+      "internal_transactions": 3,
+      "internal_volume": 264000.0,
+      "external_transactions": 0,
+      "external_volume": 0.0,
+      "connectivity": 0.5,
+      "repeated_interactions": 0,
+      "volume_concentration": 0.2778,
+      "suspicious_concentration": true,
+      "internal_volume_share": 1.0,
+      "largest_member_by_volume": "ACC-6002",
+      "window": {
+        "start": 1794634399.3970442,
+        "end": 1794634699.3970451,
+        "duration_seconds": 300.0000009536743
+      }
+    },
+    {
+      "community_id": "COMM-003",
+      "members": [
+        "ACC-7001",
+        "ACC-7002",
+        "ACC-7003"
+      ],
+      "size": 3,
+      "internal_transactions": 6,
+      "internal_volume": 300000.0,
+      "external_transactions": 0,
+      "external_volume": 0.0,
+      "connectivity": 2.0,
+      "repeated_interactions": 3,
+      "volume_concentration": 0.3333,
+      "suspicious_concentration": true,
+      "internal_volume_share": 1.0,
+      "largest_member_by_volume": "ACC-7003",
+      "window": {
+        "start": 1794634399.3970442,
+        "end": 1794634699.3970451,
+        "duration_seconds": 300.0000009536743
+      }
+    }
+  ],
+  "page": 1,
+  "page_size": 50,
+  "total_pages": 1
+}

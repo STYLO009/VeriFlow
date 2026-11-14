@@ -1,0 +1,61 @@
+{
+  "time_window": "5m",
+  "cycle_count": 1,
+  "cycles": [
+    {
+      "accounts": [
+        "ACC-7001",
+        "ACC-7002",
+        "ACC-7003"
+      ],
+      "transaction_ids": [
+        "TX-DEMO-14",
+        "TX-DEMO-15",
+        "TX-DEMO-16"
+      ],
+      "amounts": [
+        50000.0,
+        50000.0,
+        50000.0
+      ],
+      "timestamps": [
+        1794634619.182,
+        1794634622.182,
+        1794634625.182
+      ],
+      "length": 3,
+      "total_amount": 150000.0,
+      "duration_seconds": 6.0
+    }
+  ],
+  "repeated_activity": [
+    {
+      "accounts": [
+        "ACC-7001",
+        "ACC-7002",
+        "ACC-7003"
+      ],
+      "occurrences": 2,
+      "transaction_ids": [
+        "TX-DEMO-14",
+        "TX-DEMO-15",
+        "TX-DEMO-16",
+        "TX-DEMO-17",
+        "TX-DEMO-18",
+        "TX-DEMO-19"
+      ],
+      "total_amount": 300000.0,
+      "edges_per_hop": [
+        2,
+        2,
+        2
+      ]
+    }
+  ],
+  "detection_parameters": {
+    "min_length": 3,
+    "max_length": 6,
+    "max_cycles": 100,
+    "settled_only": true
+  }
+}

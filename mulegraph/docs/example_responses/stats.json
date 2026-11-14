@@ -1,0 +1,38 @@
+{
+  "status": "ok",
+  "store": {
+    "graph_version": 44,
+    "nodes": 63,
+    "edges": 44,
+    "transactions": 44,
+    "unique_events": 44,
+    "rejected_events": 0,
+    "status_counts": {
+      "COMPLETED": 42,
+      "HELD_FOR_VERIFICATION": 1,
+      "REJECTED": 1
+    },
+    "settled_volume": 764000.0,
+    "index": {
+      "nodes": 63,
+      "edges": 44,
+      "indexed_out_nodes": 36,
+      "indexed_in_nodes": 33
+    }
+  },
+  "windows": [
+    "5s",
+    "30s",
+    "5m",
+    "1h",
+    "24h"
+  ],
+  "profiles": [
+    "FAST",
+    "STANDARD",
+    "DEEP"
+  ],
+  "uptime_seconds": 20.39,
+  "events_processed": 0,
+  "analyses_run": 3
+}

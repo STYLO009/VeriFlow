@@ -1,0 +1,19 @@
+{
+  "error": {
+    "code": "VALIDATION_ERROR",
+    "message": "Request validation failed",
+    "detail": [
+      {
+        "type": "missing",
+        "loc": [
+          "body",
+          "account_id"
+        ],
+        "msg": "Field required",
+        "input": {
+          "time_window": "5m"
+        }
+      }
+    ]
+  }
+}

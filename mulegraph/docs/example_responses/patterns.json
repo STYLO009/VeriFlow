@@ -1,0 +1,731 @@
+{
+  "account_id": "ACC-9001",
+  "time_window": "5m",
+  "profile": "STANDARD",
+  "pattern_count": 10,
+  "patterns": [
+    {
+      "pattern_type": "FAN_IN",
+      "pattern_id": "FAN_IN:3f69c2e590",
+      "accounts_involved": [
+        "ACC-9001",
+        "ACC-8100",
+        "ACC-8101",
+        "ACC-8102",
+        "ACC-8103",
+        "ACC-8104",
+        "ACC-8105",
+        "ACC-8106"
+      ],
+      "transaction_ids": [
+        "TX-DEMO-1",
+        "TX-DEMO-2",
+        "TX-DEMO-3",
+        "TX-DEMO-4",
+        "TX-DEMO-5",
+        "TX-DEMO-6",
+        "TX-DEMO-7"
+      ],
+      "amounts": [
+        12000.0,
+        12750.0,
+        13500.0,
+        14250.0,
+        15000.0,
+        15750.0,
+        16500.0
+      ],
+      "timestamps": [
+        1794634549.182,
+        1794634553.182,
+        1794634557.182,
+        1794634561.182,
+        1794634565.182,
+        1794634569.182,
+        1794634573.182
+      ],
+      "time_window": {
+        "start": 1794634399.3604906,
+        "end": 1794634699.3604915,
+        "duration_seconds": 300.0000009536743
+      },
+      "algorithm": "fan_detection.detect_fan_in",
+      "supporting_metrics": {
+        "unique_accounts": 7,
+        "transaction_count": 7,
+        "total_amount": 99750.0,
+        "time_concentration": {
+          "span_seconds": 24.0,
+          "peak_bucket_seconds": 60.0,
+          "peak_bucket_count": 4,
+          "peak_share": 0.571,
+          "frequency_per_second": 0.2917
+        },
+        "amount_distribution": {
+          "count": 7,
+          "total": 99750.0,
+          "min": 12000.0,
+          "max": 16500.0,
+          "mean": 14250.0,
+          "stdev": 1500.0,
+          "coefficient_of_variation": 0.105
+        }
+      },
+      "detection_parameters": {
+        "min_unique_accounts": 5,
+        "min_transactions": 5
+      },
+      "severity": "CRITICAL",
+      "explanation": "Multiple accounts transferred funds into a common account. 7 unique counterparties, 7 settled transactions totalling 99750.0 in the analysed window."
+    },
+    {
+      "pattern_type": "FAN_OUT",
+      "pattern_id": "FAN_OUT:08ba70ecc4",
+      "accounts_involved": [
+        "ACC-9001",
+        "ACC-8200",
+        "ACC-8201",
+        "ACC-8202",
+        "ACC-8203",
+        "ACC-8204",
+        "ACC-8205"
+      ],
+      "transaction_ids": [
+        "TX-DEMO-8",
+        "TX-DEMO-9",
+        "TX-DEMO-10",
+        "TX-DEMO-11",
+        "TX-DEMO-12",
+        "TX-DEMO-13"
+      ],
+      "amounts": [
+        13000.0,
+        13500.0,
+        14000.0,
+        14500.0,
+        15000.0,
+        15500.0
+      ],
+      "timestamps": [
+        1794634583.182,
+        1794634587.182,
+        1794634591.182,
+        1794634595.182,
+        1794634599.182,
+        1794634603.182
+      ],
+      "time_window": {
+        "start": 1794634399.3604906,
+        "end": 1794634699.3604915,
+        "duration_seconds": 300.0000009536743
+      },
+      "algorithm": "fan_detection.detect_fan_out",
+      "supporting_metrics": {
+        "unique_accounts": 6,
+        "transaction_count": 6,
+        "total_amount": 85500.0,
+        "time_concentration": {
+          "span_seconds": 20.0,
+          "peak_bucket_seconds": 60.0,
+          "peak_bucket_count": 6,
+          "peak_share": 1.0,
+          "frequency_per_second": 0.3
+        },
+        "amount_distribution": {
+          "count": 6,
+          "total": 85500.0,
+          "min": 13000.0,
+          "max": 15500.0,
+          "mean": 14250.0,
+          "stdev": 853.91,
+          "coefficient_of_variation": 0.06
+        }
+      },
+      "detection_parameters": {
+        "min_unique_accounts": 5,
+        "min_transactions": 5
+      },
+      "severity": "CRITICAL",
+      "explanation": "The account distributed funds to many destination accounts. 6 unique counterparties, 6 settled transactions totalling 85500.0 in the analysed window."
+    },
+    {
+      "pattern_type": "CIRCULAR_TRANSACTION",
+      "pattern_id": "CIRCULAR_TRANSACTION:083bda72df",
+      "accounts_involved": [
+        "ACC-7001",
+        "ACC-7002",
+        "ACC-7003"
+      ],
+      "transaction_ids": [
+        "TX-DEMO-14",
+        "TX-DEMO-15",
+        "TX-DEMO-16"
+      ],
+      "amounts": [
+        50000.0,
+        50000.0,
+        50000.0
+      ],
+      "timestamps": [
+        1794634619.182,
+        1794634622.182,
+        1794634625.182
+      ],
+      "time_window": {
+        "start": 1794634399.3604906,
+        "end": 1794634699.3604915,
+        "duration_seconds": 300.0000009536743
+      },
+      "algorithm": "cycle_detection.find_cycles",
+      "supporting_metrics": {
+        "cycle_length": 3,
+        "total_amount": 150000.0,
+        "duration_seconds": 6.0
+      },
+      "detection_parameters": {
+        "min_length": 3,
+        "max_length": 6,
+        "max_cycles": 100,
+        "settled_only": true
+      },
+      "severity": "HIGH",
+      "explanation": "Funds moved in a closed loop: ACC-7001 -> ACC-7002 -> ACC-7003 -> ACC-7001 across 3 settled transactions totalling 150000.0."
+    },
+    {
+      "pattern_type": "REPEATED_CIRCULAR_ACTIVITY",
+      "pattern_id": "REPEATED_CIRCULAR:da6d45386e",
+      "accounts_involved": [
+        "ACC-7001",
+        "ACC-7002",
+        "ACC-7003"
+      ],
+      "transaction_ids": [
+        "TX-DEMO-14",
+        "TX-DEMO-15",
+        "TX-DEMO-16",
+        "TX-DEMO-17",
+        "TX-DEMO-18",
+        "TX-DEMO-19"
+      ],
+      "amounts": [
+        300000.0
+      ],
+      "timestamps": [],
+      "time_window": {
+        "start": 1794634399.3604906,
+        "end": 1794634699.3604915,
+        "duration_seconds": 300.0000009536743
+      },
+      "algorithm": "cycle_detection.find_cycles",
+      "supporting_metrics": {
+        "occurrences": 2
+      },
+      "detection_parameters": {
+        "min_length": 3,
+        "max_length": 6,
+        "max_cycles": 100,
+        "settled_only": true
+      },
+      "severity": "MEDIUM",
+      "explanation": "The same account loop ACC-7001 -> ACC-7002 -> ACC-7003 recurred 2 times inside the analysed window."
+    },
+    {
+      "pattern_type": "FAN_IN_THEN_FAN_OUT",
+      "pattern_id": "FAN_IN_THEN_FAN_OUT:9ae57615f5",
+      "accounts_involved": [
+        "ACC-9001",
+        "ACC-8100",
+        "ACC-8101",
+        "ACC-8102",
+        "ACC-8103",
+        "ACC-8104",
+        "ACC-8105",
+        "ACC-8106",
+        "ACC-8200",
+        "ACC-8201",
+        "ACC-8202",
+        "ACC-8203",
+        "ACC-8204",
+        "ACC-8205"
+      ],
+      "transaction_ids": [
+        "TX-DEMO-1",
+        "TX-DEMO-2",
+        "TX-DEMO-3",
+        "TX-DEMO-4",
+        "TX-DEMO-5",
+        "TX-DEMO-6",
+        "TX-DEMO-7",
+        "TX-DEMO-8",
+        "TX-DEMO-9",
+        "TX-DEMO-10",
+        "TX-DEMO-11",
+        "TX-DEMO-12",
+        "TX-DEMO-13"
+      ],
+      "amounts": [
+        12000.0,
+        12750.0,
+        13500.0,
+        14250.0,
+        15000.0,
+        15750.0,
+        16500.0,
+        13000.0,
+        13500.0,
+        14000.0,
+        14500.0,
+        15000.0,
+        15500.0
+      ],
+      "timestamps": [
+        1794634549.182,
+        1794634553.182,
+        1794634557.182,
+        1794634561.182,
+        1794634565.182,
+        1794634569.182,
+        1794634573.182,
+        1794634583.182,
+        1794634587.182,
+        1794634591.182,
+        1794634595.182,
+        1794634599.182,
+        1794634603.182
+      ],
+      "time_window": {
+        "start": 1794634399.3604906,
+        "end": 1794634699.3604915,
+        "duration_seconds": 300.0000009536743
+      },
+      "algorithm": "temporal_motifs.detect_fan_in_then_fan_out",
+      "supporting_metrics": {
+        "inbound_accounts": 7,
+        "inbound_transactions": 7,
+        "outbound_accounts": 6,
+        "outbound_transactions": 6,
+        "inbound_amount": 99750.0,
+        "outbound_amount": 85500.0,
+        "burst_seconds": 24.0,
+        "pass_through_seconds": 30.0
+      },
+      "detection_parameters": {
+        "min_fan_in": 4,
+        "min_fan_out": 4,
+        "fan_window_seconds": 60.0,
+        "distribution_grace_seconds": 120.0,
+        "min_received_amount": 10000.0,
+        "pass_through_ratio": 0.6,
+        "chain_length": 4,
+        "max_hop_gap_seconds": 60.0,
+        "max_candidates": 300,
+        "max_motifs": 50
+      },
+      "severity": "HIGH",
+      "explanation": "7 accounts paid into ACC-9001 within 24.0s and it distributed to 6 destinations within 30.0s."
+    },
+    {
+      "pattern_type": "RAPID_DISTRIBUTION",
+      "pattern_id": "RAPID_DISTRIBUTION:9ae57615f5",
+      "accounts_involved": [
+        "ACC-8100",
+        "ACC-8101",
+        "ACC-8102",
+        "ACC-8103",
+        "ACC-8104",
+        "ACC-8105",
+        "ACC-8106",
+        "ACC-8200",
+        "ACC-8201",
+        "ACC-8202",
+        "ACC-8203",
+        "ACC-8204",
+        "ACC-8205",
+        "ACC-9001"
+      ],
+      "transaction_ids": [
+        "TX-DEMO-1",
+        "TX-DEMO-2",
+        "TX-DEMO-3",
+        "TX-DEMO-4",
+        "TX-DEMO-5",
+        "TX-DEMO-6",
+        "TX-DEMO-7",
+        "TX-DEMO-8",
+        "TX-DEMO-9",
+        "TX-DEMO-10",
+        "TX-DEMO-11",
+        "TX-DEMO-12",
+        "TX-DEMO-13"
+      ],
+      "amounts": [
+        12000.0,
+        12750.0,
+        13500.0,
+        14250.0,
+        15000.0,
+        15750.0,
+        16500.0,
+        13000.0,
+        13500.0,
+        14000.0,
+        14500.0,
+        15000.0,
+        15500.0
+      ],
+      "timestamps": [
+        1794634549.182,
+        1794634553.182,
+        1794634557.182,
+        1794634561.182,
+        1794634565.182,
+        1794634569.182,
+        1794634573.182,
+        1794634583.182,
+        1794634587.182,
+        1794634591.182,
+        1794634595.182,
+        1794634599.182,
+        1794634603.182
+      ],
+      "time_window": {
+        "start": 1794634399.3604906,
+        "end": 1794634699.3604915,
+        "duration_seconds": 300.0000009536743
+      },
+      "algorithm": "temporal_motifs.detect_rapid_distribution",
+      "supporting_metrics": {
+        "received_amount": 99750.0,
+        "distributed_amount": 85500.0,
+        "pass_through_ratio": 0.857,
+        "inbound_transactions": 7,
+        "outbound_transactions": 6
+      },
+      "detection_parameters": {
+        "min_fan_in": 4,
+        "min_fan_out": 4,
+        "fan_window_seconds": 60.0,
+        "distribution_grace_seconds": 120.0,
+        "min_received_amount": 10000.0,
+        "pass_through_ratio": 0.6,
+        "chain_length": 4,
+        "max_hop_gap_seconds": 60.0,
+        "max_candidates": 300,
+        "max_motifs": 50
+      },
+      "severity": "HIGH",
+      "explanation": "ACC-9001 received 99750.0 and forwarded 85500.0 (85.7%) within 120s."
+    },
+    {
+      "pattern_type": "RAPID_DISTRIBUTION",
+      "pattern_id": "RAPID_DISTRIBUTION:3243724d4e",
+      "accounts_involved": [
+        "ACC-7001",
+        "ACC-7002",
+        "ACC-7003"
+      ],
+      "transaction_ids": [
+        "TX-DEMO-14",
+        "TX-DEMO-17",
+        "TX-DEMO-15",
+        "TX-DEMO-18"
+      ],
+      "amounts": [
+        50000.0,
+        50000.0,
+        50000.0,
+        50000.0
+      ],
+      "timestamps": [
+        1794634619.182,
+        1794634644.182,
+        1794634622.182,
+        1794634647.182
+      ],
+      "time_window": {
+        "start": 1794634399.3604906,
+        "end": 1794634699.3604915,
+        "duration_seconds": 300.0000009536743
+      },
+      "algorithm": "temporal_motifs.detect_rapid_distribution",
+      "supporting_metrics": {
+        "received_amount": 100000.0,
+        "distributed_amount": 100000.0,
+        "pass_through_ratio": 1.0,
+        "inbound_transactions": 2,
+        "outbound_transactions": 2
+      },
+      "detection_parameters": {
+        "min_fan_in": 4,
+        "min_fan_out": 4,
+        "fan_window_seconds": 60.0,
+        "distribution_grace_seconds": 120.0,
+        "min_received_amount": 10000.0,
+        "pass_through_ratio": 0.6,
+        "chain_length": 4,
+        "max_hop_gap_seconds": 60.0,
+        "max_candidates": 300,
+        "max_motifs": 50
+      },
+      "severity": "HIGH",
+      "explanation": "ACC-7002 received 100000.0 and forwarded 100000.0 (100.0%) within 120s."
+    },
+    {
+      "pattern_type": "RAPID_DISTRIBUTION",
+      "pattern_id": "RAPID_DISTRIBUTION:aeaf6035da",
+      "accounts_involved": [
+        "ACC-7001",
+        "ACC-7002",
+        "ACC-7003"
+      ],
+      "transaction_ids": [
+        "TX-DEMO-15",
+        "TX-DEMO-18",
+        "TX-DEMO-16",
+        "TX-DEMO-19"
+      ],
+      "amounts": [
+        50000.0,
+        50000.0,
+        50000.0,
+        50000.0
+      ],
+      "timestamps": [
+        1794634622.182,
+        1794634647.182,
+        1794634625.182,
+        1794634650.182
+      ],
+      "time_window": {
+        "start": 1794634399.3604906,
+        "end": 1794634699.3604915,
+        "duration_seconds": 300.0000009536743
+      },
+      "algorithm": "temporal_motifs.detect_rapid_distribution",
+      "supporting_metrics": {
+        "received_amount": 100000.0,
+        "distributed_amount": 100000.0,
+        "pass_through_ratio": 1.0,
+        "inbound_transactions": 2,
+        "outbound_transactions": 2
+      },
+      "detection_parameters": {
+        "min_fan_in": 4,
+        "min_fan_out": 4,
+        "fan_window_seconds": 60.0,
+        "distribution_grace_seconds": 120.0,
+        "min_received_amount": 10000.0,
+        "pass_through_ratio": 0.6,
+        "chain_length": 4,
+        "max_hop_gap_seconds": 60.0,
+        "max_candidates": 300,
+        "max_motifs": 50
+      },
+      "severity": "HIGH",
+      "explanation": "ACC-7003 received 100000.0 and forwarded 100000.0 (100.0%) within 120s."
+    },
+    {
+      "pattern_type": "SEQUENTIAL_CHAIN",
+      "pattern_id": "SEQUENTIAL_CHAIN:18364960b5",
+      "accounts_involved": [
+        "ACC-6001",
+        "ACC-6002",
+        "ACC-6003",
+        "ACC-6004"
+      ],
+      "transaction_ids": [
+        "TX-DEMO-20",
+        "TX-DEMO-21",
+        "TX-DEMO-22"
+      ],
+      "amounts": [
+        90000.0,
+        88000.0,
+        86000.0
+      ],
+      "timestamps": [
+        1794634679.182,
+        1794634683.182,
+        1794634687.182
+      ],
+      "time_window": {
+        "start": 1794634399.3604906,
+        "end": 1794634699.3604915,
+        "duration_seconds": 300.0000009536743
+      },
+      "algorithm": "temporal_motifs.detect_sequential_chain",
+      "supporting_metrics": {
+        "chain_length": 4,
+        "max_hop_gap_seconds": 4.0,
+        "total_amount": 264000.0
+      },
+      "detection_parameters": {
+        "min_fan_in": 4,
+        "min_fan_out": 4,
+        "fan_window_seconds": 60.0,
+        "distribution_grace_seconds": 120.0,
+        "min_received_amount": 10000.0,
+        "pass_through_ratio": 0.6,
+        "chain_length": 4,
+        "max_hop_gap_seconds": 60.0,
+        "max_candidates": 300,
+        "max_motifs": 50
+      },
+      "severity": "MEDIUM",
+      "explanation": "Sequential transfers ACC-6001 -> ACC-6002 -> ACC-6003 -> ACC-6004 with each hop within 60s of the previous one."
+    },
+    {
+      "pattern_type": "REPEATED_CIRCULAR",
+      "pattern_id": "REPEATED_CIRCULAR:da6d45386e",
+      "accounts_involved": [
+        "ACC-7001",
+        "ACC-7002",
+        "ACC-7003"
+      ],
+      "transaction_ids": [
+        "TX-DEMO-14",
+        "TX-DEMO-15",
+        "TX-DEMO-16",
+        "TX-DEMO-17",
+        "TX-DEMO-18",
+        "TX-DEMO-19"
+      ],
+      "amounts": [
+        300000.0
+      ],
+      "timestamps": [],
+      "time_window": {
+        "start": 1794634399.3604906,
+        "end": 1794634699.3604915,
+        "duration_seconds": 300.0000009536743
+      },
+      "algorithm": "temporal_motifs + cycle_detection.find_cycles",
+      "supporting_metrics": {
+        "occurrences": 2
+      },
+      "detection_parameters": {
+        "min_occurrences": 2
+      },
+      "severity": "MEDIUM",
+      "explanation": "Loop ACC-7001 -> ACC-7002 -> ACC-7003 executed 2 times in the window."
+    }
+  ],
+  "risk_assessment": {
+    "account_id": "ACC-9001",
+    "score": 0.4779,
+    "severity": "HIGH",
+    "signals": [
+      {
+        "signal": "fan_in",
+        "value": 0.674,
+        "weight": 0.22,
+        "contribution": 0.1483,
+        "observed": {
+          "unique_incoming_accounts": 7,
+          "incoming_transactions": 7,
+          "total_amount": 99750.0
+        }
+      },
+      {
+        "signal": "fan_out",
+        "value": 0.68,
+        "weight": 0.22,
+        "contribution": 0.1496,
+        "observed": {
+          "unique_outgoing_accounts": 6,
+          "outgoing_transactions": 6,
+          "total_amount": 85500.0
+        }
+      },
+      {
+        "signal": "circular_transactions",
+        "value": 0.0,
+        "weight": 0.18,
+        "contribution": 0.0,
+        "observed": {
+          "cycles_involving_account": 0,
+          "cycles_total": 1
+        }
+      },
+      {
+        "signal": "repeated_circular",
+        "value": 0.5,
+        "weight": 0.08,
+        "contribution": 0.04,
+        "observed": {
+          "max_occurrences": 2
+        }
+      },
+      {
+        "signal": "temporal_motifs",
+        "value": 1.0,
+        "weight": 0.14,
+        "contribution": 0.14,
+        "observed": {
+          "motifs_involving_account": 2
+        }
+      }
+    ],
+    "signal_weights": {
+      "fan_in": 0.22,
+      "fan_out": 0.22,
+      "circular_transactions": 0.18,
+      "repeated_circular": 0.08,
+      "temporal_motifs": 0.14,
+      "risk_propagation": 0.08,
+      "community_concentration": 0.05,
+      "centrality_bridge": 0.03
+    },
+    "explanations": [
+      "Fan-in detected: 7 unique sources, 7 settled transactions.",
+      "Fan-out detected: 6 unique destinations.",
+      "Account participates in 0 detected transaction cycle(s).",
+      "Repeated circular activity observed (up to 2 occurrences).",
+      "2 temporal motif(s) link this account to rapid pass-through behaviour."
+    ],
+    "scoring_parameters": {
+      "signal_weights": {
+        "fan_in": 0.22,
+        "fan_out": 0.22,
+        "circular_transactions": 0.18,
+        "repeated_circular": 0.08,
+        "temporal_motifs": 0.14,
+        "risk_propagation": 0.08,
+        "community_concentration": 0.05,
+        "centrality_bridge": 0.03
+      }
+    },
+    "disclaimer": "Rule-based graph triage score derived from observed transaction patterns. It is not a legal or behavioural verdict and connection to flagged accounts alone is not proof of wrongdoing."
+  },
+  "analysis_id": "GRAPH-E5D526A7",
+  "analysis_metadata": {
+    "algorithms_executed": [
+      "cycle_detection.find_cycles",
+      "fan_detection.detect_fan_in",
+      "fan_detection.detect_fan_out",
+      "graph_store.neighborhood",
+      "risk_engine.assess",
+      "subgraph_extractor.extract_subgraph",
+      "temporal_motifs.detect_temporal_motifs"
+    ],
+    "execution_time_ms": 13.06,
+    "graph_version": 44,
+    "engine_version": "1",
+    "budget": {
+      "visits": 522,
+      "exhausted": false,
+      "exhausted_reason": null,
+      "remaining_ms": 1986.96
+    },
+    "notes": [],
+    "evidence_digest": "8129af1bcafa",
+    "generated_at": "2026-11-14T05:38:19.373618+00:00",
+    "cache_status": {
+      "communities": {},
+      "centrality": {}
+    }
+  },
+  "page": 1,
+  "page_size": 50,
+  "total_pages": 1
+}

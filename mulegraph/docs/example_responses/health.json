@@ -1,0 +1,14 @@
+{
+  "status": "healthy",
+  "graph_version": 44,
+  "nodes": 63,
+  "edges": 44,
+  "cache_status": {
+    "communities": {
+      "1794634399:1794634699": 0.2
+    },
+    "centrality": {
+      "1794634399:1794634699": 0.0
+    }
+  }
+}

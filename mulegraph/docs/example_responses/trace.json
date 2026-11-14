@@ -1,0 +1,68 @@
+{
+  "source": "ACC-6001",
+  "destination": "ACC-6004",
+  "time_window": "5m",
+  "path_count": 1,
+  "shortest_hops": 3,
+  "truncated": false,
+  "paths": [
+    {
+      "source": "ACC-6001",
+      "destination": "ACC-6004",
+      "hop_count": 3,
+      "accounts": [
+        "ACC-6001",
+        "ACC-6002",
+        "ACC-6003",
+        "ACC-6004"
+      ],
+      "transaction_ids": [
+        "TX-DEMO-20",
+        "TX-DEMO-21",
+        "TX-DEMO-22"
+      ],
+      "total_amount": 264000.0,
+      "min_hop_amount": 86000.0,
+      "duration_seconds": 8.0,
+      "chronologically_ordered": true,
+      "hops": [
+        {
+          "position": 1,
+          "from_account": "ACC-6001",
+          "to_account": "ACC-6002",
+          "transaction_id": "TX-DEMO-20",
+          "timestamp": 1794634679.182,
+          "amount": 90000.0,
+          "status": "COMPLETED"
+        },
+        {
+          "position": 2,
+          "from_account": "ACC-6002",
+          "to_account": "ACC-6003",
+          "transaction_id": "TX-DEMO-21",
+          "timestamp": 1794634683.182,
+          "amount": 88000.0,
+          "status": "COMPLETED"
+        },
+        {
+          "position": 3,
+          "from_account": "ACC-6003",
+          "to_account": "ACC-6004",
+          "transaction_id": "TX-DEMO-22",
+          "timestamp": 1794634687.182,
+          "amount": 86000.0,
+          "status": "COMPLETED"
+        }
+      ]
+    }
+  ],
+  "detection_parameters": {
+    "max_hops": 4,
+    "min_amount": null,
+    "max_paths": 25,
+    "shortest_only": false,
+    "strict_chronological": false,
+    "settled_only": true,
+    "windowed": true
+  }
+}

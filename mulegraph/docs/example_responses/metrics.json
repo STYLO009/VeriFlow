@@ -1,0 +1,529 @@
+{
+  "time_window": "5m",
+  "account_id": null,
+  "accounts_measured": 61,
+  "bridge_nodes": [
+    "ACC-6002",
+    "ACC-6003",
+    "ACC-9001"
+  ],
+  "top_pagerank": [
+    {
+      "account_id": "ACC-9001",
+      "pagerank": 0.0623505
+    },
+    {
+      "account_id": "ACC-7001",
+      "pagerank": 0.05980863
+    },
+    {
+      "account_id": "ACC-7002",
+      "pagerank": 0.05980863
+    },
+    {
+      "account_id": "ACC-7003",
+      "pagerank": 0.05980863
+    },
+    {
+      "account_id": "ACC-6004",
+      "pagerank": 0.02858815
+    },
+    {
+      "account_id": "ACC-6003",
+      "pagerank": 0.02307866
+    },
+    {
+      "account_id": "ACC-8200",
+      "pagerank": 0.01780428
+    },
+    {
+      "account_id": "ACC-8201",
+      "pagerank": 0.01780428
+    },
+    {
+      "account_id": "ACC-8202",
+      "pagerank": 0.01780428
+    },
+    {
+      "account_id": "ACC-8203",
+      "pagerank": 0.01780428
+    }
+  ],
+  "top_betweenness": [
+    {
+      "account_id": "ACC-9001",
+      "betweenness": 0.01186441
+    },
+    {
+      "account_id": "ACC-6002",
+      "betweenness": 0.00056497
+    },
+    {
+      "account_id": "ACC-6003",
+      "betweenness": 0.00056497
+    },
+    {
+      "account_id": "ACC-7001",
+      "betweenness": 0.00028249
+    },
+    {
+      "account_id": "ACC-7002",
+      "betweenness": 0.00028249
+    },
+    {
+      "account_id": "ACC-7003",
+      "betweenness": 0.00028249
+    },
+    {
+      "account_id": "ACC-8100",
+      "betweenness": 0.0
+    },
+    {
+      "account_id": "ACC-8101",
+      "betweenness": 0.0
+    },
+    {
+      "account_id": "ACC-8400",
+      "betweenness": 0.0
+    },
+    {
+      "account_id": "ACC-8500",
+      "betweenness": 0.0
+    }
+  ],
+  "metrics": {
+    "ACC-8100": {
+      "in_degree": 0.0,
+      "out_degree": 1.0,
+      "weighted_degree": 12000.0,
+      "pagerank": 0.0089713,
+      "betweenness": 0.0
+    },
+    "ACC-9001": {
+      "in_degree": 9.0,
+      "out_degree": 6.0,
+      "weighted_degree": 185250.0,
+      "pagerank": 0.0623505,
+      "betweenness": 0.01186441
+    },
+    "ACC-8101": {
+      "in_degree": 0.0,
+      "out_degree": 1.0,
+      "weighted_degree": 12750.0,
+      "pagerank": 0.0089713,
+      "betweenness": 0.0
+    },
+    "ACC-8400": {
+      "in_degree": 0.0,
+      "out_degree": 1.0,
+      "weighted_degree": 500.0,
+      "pagerank": 0.0089713,
+      "betweenness": 0.0
+    },
+    "ACC-8500": {
+      "in_degree": 1.0,
+      "out_degree": 0.0,
+      "weighted_degree": 500.0,
+      "pagerank": 0.0165969,
+      "betweenness": 0.0
+    },
+    "ACC-8102": {
+      "in_degree": 0.0,
+      "out_degree": 1.0,
+      "weighted_degree": 13500.0,
+      "pagerank": 0.0089713,
+      "betweenness": 0.0
+    },
+    "ACC-8401": {
+      "in_degree": 0.0,
+      "out_degree": 1.0,
+      "weighted_degree": 525.0,
+      "pagerank": 0.0089713,
+      "betweenness": 0.0
+    },
+    "ACC-8501": {
+      "in_degree": 1.0,
+      "out_degree": 0.0,
+      "weighted_degree": 525.0,
+      "pagerank": 0.0165969,
+      "betweenness": 0.0
+    },
+    "ACC-8402": {
+      "in_degree": 0.0,
+      "out_degree": 1.0,
+      "weighted_degree": 550.0,
+      "pagerank": 0.0089713,
+      "betweenness": 0.0
+    },
+    "ACC-8502": {
+      "in_degree": 1.0,
+      "out_degree": 0.0,
+      "weighted_degree": 550.0,
+      "pagerank": 0.0165969,
+      "betweenness": 0.0
+    },
+    "ACC-8103": {
+      "in_degree": 0.0,
+      "out_degree": 1.0,
+      "weighted_degree": 14250.0,
+      "pagerank": 0.0089713,
+      "betweenness": 0.0
+    },
+    "ACC-8403": {
+      "in_degree": 0.0,
+      "out_degree": 1.0,
+      "weighted_degree": 575.0,
+      "pagerank": 0.0089713,
+      "betweenness": 0.0
+    },
+    "ACC-8503": {
+      "in_degree": 1.0,
+      "out_degree": 0.0,
+      "weighted_degree": 575.0,
+      "pagerank": 0.0165969,
+      "betweenness": 0.0
+    },
+    "ACC-8104": {
+      "in_degree": 0.0,
+      "out_degree": 1.0,
+      "weighted_degree": 15000.0,
+      "pagerank": 0.0089713,
+      "betweenness": 0.0
+    },
+    "ACC-8404": {
+      "in_degree": 0.0,
+      "out_degree": 1.0,
+      "weighted_degree": 600.0,
+      "pagerank": 0.0089713,
+      "betweenness": 0.0
+    },
+    "ACC-8504": {
+      "in_degree": 1.0,
+      "out_degree": 0.0,
+      "weighted_degree": 600.0,
+      "pagerank": 0.0165969,
+      "betweenness": 0.0
+    },
+    "ACC-8105": {
+      "in_degree": 0.0,
+      "out_degree": 1.0,
+      "weighted_degree": 15750.0,
+      "pagerank": 0.0089713,
+      "betweenness": 0.0
+    },
+    "ACC-8405": {
+      "in_degree": 0.0,
+      "out_degree": 1.0,
+      "weighted_degree": 625.0,
+      "pagerank": 0.0089713,
+      "betweenness": 0.0
+    },
+    "ACC-8505": {
+      "in_degree": 1.0,
+      "out_degree": 0.0,
+      "weighted_degree": 625.0,
+      "pagerank": 0.0165969,
+      "betweenness": 0.0
+    },
+    "ACC-8406": {
+      "in_degree": 0.0,
+      "out_degree": 1.0,
+      "weighted_degree": 650.0,
+      "pagerank": 0.0089713,
+      "betweenness": 0.0
+    },
+    "ACC-8506": {
+      "in_degree": 1.0,
+      "out_degree": 0.0,
+      "weighted_degree": 650.0,
+      "pagerank": 0.0165969,
+      "betweenness": 0.0
+    },
+    "ACC-8106": {
+      "in_degree": 0.0,
+      "out_degree": 1.0,
+      "weighted_degree": 16500.0,
+      "pagerank": 0.0089713,
+      "betweenness": 0.0
+    },
+    "ACC-8407": {
+      "in_degree": 0.0,
+      "out_degree": 1.0,
+      "weighted_degree": 675.0,
+      "pagerank": 0.0089713,
+      "betweenness": 0.0
+    },
+    "ACC-8507": {
+      "in_degree": 1.0,
+      "out_degree": 0.0,
+      "weighted_degree": 675.0,
+      "pagerank": 0.0165969,
+      "betweenness": 0.0
+    },
+    "ACC-8408": {
+      "in_degree": 0.0,
+      "out_degree": 1.0,
+      "weighted_degree": 700.0,
+      "pagerank": 0.0089713,
+      "betweenness": 0.0
+    },
+    "ACC-8508": {
+      "in_degree": 1.0,
+      "out_degree": 0.0,
+      "weighted_degree": 700.0,
+      "pagerank": 0.0165969,
+      "betweenness": 0.0
+    },
+    "ACC-8409": {
+      "in_degree": 0.0,
+      "out_degree": 1.0,
+      "weighted_degree": 725.0,
+      "pagerank": 0.0089713,
+      "betweenness": 0.0
+    },
+    "ACC-8509": {
+      "in_degree": 1.0,
+      "out_degree": 0.0,
+      "weighted_degree": 725.0,
+      "pagerank": 0.0165969,
+      "betweenness": 0.0
+    },
+    "ACC-8200": {
+      "in_degree": 1.0,
+      "out_degree": 0.0,
+      "weighted_degree": 13000.0,
+      "pagerank": 0.01780428,
+      "betweenness": 0.0
+    },
+    "ACC-8410": {
+      "in_degree": 0.0,
+      "out_degree": 1.0,
+      "weighted_degree": 750.0,
+      "pagerank": 0.0089713,
+      "betweenness": 0.0
+    },
+    "ACC-8510": {
+      "in_degree": 1.0,
+      "out_degree": 0.0,
+      "weighted_degree": 750.0,
+      "pagerank": 0.0165969,
+      "betweenness": 0.0
+    },
+    "ACC-8411": {
+      "in_degree": 0.0,
+      "out_degree": 1.0,
+      "weighted_degree": 775.0,
+      "pagerank": 0.0089713,
+      "betweenness": 0.0
+    },
+    "ACC-8511": {
+      "in_degree": 1.0,
+      "out_degree": 0.0,
+      "weighted_degree": 775.0,
+      "pagerank": 0.0165969,
+      "betweenness": 0.0
+    },
+    "ACC-8201": {
+      "in_degree": 1.0,
+      "out_degree": 0.0,
+      "weighted_degree": 13500.0,
+      "pagerank": 0.01780428,
+      "betweenness": 0.0
+    },
+    "ACC-8412": {
+      "in_degree": 0.0,
+      "out_degree": 1.0,
+      "weighted_degree": 800.0,
+      "pagerank": 0.0089713,
+      "betweenness": 0.0
+    },
+    "ACC-8512": {
+      "in_degree": 1.0,
+      "out_degree": 0.0,
+      "weighted_degree": 800.0,
+      "pagerank": 0.0165969,
+      "betweenness": 0.0
+    },
+    "ACC-8202": {
+      "in_degree": 1.0,
+      "out_degree": 0.0,
+      "weighted_degree": 14000.0,
+      "pagerank": 0.01780428,
+      "betweenness": 0.0
+    },
+    "ACC-8413": {
+      "in_degree": 0.0,
+      "out_degree": 1.0,
+      "weighted_degree": 825.0,
+      "pagerank": 0.0089713,
+      "betweenness": 0.0
+    },
+    "ACC-8513": {
+      "in_degree": 1.0,
+      "out_degree": 0.0,
+      "weighted_degree": 825.0,
+      "pagerank": 0.0165969,
+      "betweenness": 0.0
+    },
+    "ACC-8203": {
+      "in_degree": 1.0,
+      "out_degree": 0.0,
+      "weighted_degree": 14500.0,
+      "pagerank": 0.01780428,
+      "betweenness": 0.0
+    },
+    "ACC-8414": {
+      "in_degree": 0.0,
+      "out_degree": 1.0,
+      "weighted_degree": 850.0,
+      "pagerank": 0.0089713,
+      "betweenness": 0.0
+    },
+    "ACC-8514": {
+      "in_degree": 1.0,
+      "out_degree": 0.0,
+      "weighted_degree": 850.0,
+      "pagerank": 0.0165969,
+      "betweenness": 0.0
+    },
+    "ACC-8415": {
+      "in_degree": 0.0,
+      "out_degree": 1.0,
+      "weighted_degree": 875.0,
+      "pagerank": 0.0089713,
+      "betweenness": 0.0
+    },
+    "ACC-8515": {
+      "in_degree": 1.0,
+      "out_degree": 0.0,
+      "weighted_degree": 875.0,
+      "pagerank": 0.0165969,
+      "betweenness": 0.0
+    },
+    "ACC-8204": {
+      "in_degree": 1.0,
+      "out_degree": 0.0,
+      "weighted_degree": 15000.0,
+      "pagerank": 0.01780428,
+      "betweenness": 0.0
+    },
+    "ACC-8416": {
+      "in_degree": 0.0,
+      "out_degree": 1.0,
+      "weighted_degree": 900.0,
+      "pagerank": 0.0089713,
+      "betweenness": 0.0
+    },
+    "ACC-8516": {
+      "in_degree": 1.0,
+      "out_degree": 0.0,
+      "weighted_degree": 900.0,
+      "pagerank": 0.0165969,
+      "betweenness": 0.0
+    },
+    "ACC-8205": {
+      "in_degree": 1.0,
+      "out_degree": 0.0,
+      "weighted_degree": 15500.0,
+      "pagerank": 0.01780428,
+      "betweenness": 0.0
+    },
+    "ACC-8417": {
+      "in_degree": 0.0,
+      "out_degree": 1.0,
+      "weighted_degree": 925.0,
+      "pagerank": 0.0089713,
+      "betweenness": 0.0
+    },
+    "ACC-8517": {
+      "in_degree": 1.0,
+      "out_degree": 0.0,
+      "weighted_degree": 925.0,
+      "pagerank": 0.0165969,
+      "betweenness": 0.0
+    },
+    "ACC-8418": {
+      "in_degree": 0.0,
+      "out_degree": 1.0,
+      "weighted_degree": 950.0,
+      "pagerank": 0.0089713,
+      "betweenness": 0.0
+    },
+    "ACC-8518": {
+      "in_degree": 1.0,
+      "out_degree": 0.0,
+      "weighted_degree": 950.0,
+      "pagerank": 0.0165969,
+      "betweenness": 0.0
+    },
+    "ACC-8419": {
+      "in_degree": 0.0,
+      "out_degree": 1.0,
+      "weighted_degree": 975.0,
+      "pagerank": 0.0089713,
+      "betweenness": 0.0
+    },
+    "ACC-8519": {
+      "in_degree": 1.0,
+      "out_degree": 0.0,
+      "weighted_degree": 975.0,
+      "pagerank": 0.0165969,
+      "betweenness": 0.0
+    },
+    "ACC-7001": {
+      "in_degree": 2.0,
+      "out_degree": 2.0,
+      "weighted_degree": 200000.0,
+      "pagerank": 0.05980863,
+      "betweenness": 0.00028249
+    },
+    "ACC-7002": {
+      "in_degree": 2.0,
+      "out_degree": 2.0,
+      "weighted_degree": 200000.0,
+      "pagerank": 0.05980863,
+      "betweenness": 0.00028249
+    },
+    "ACC-7003": {
+      "in_degree": 2.0,
+      "out_degree": 2.0,
+      "weighted_degree": 200000.0,
+      "pagerank": 0.05980863,
+      "betweenness": 0.00028249
+    },
+    "ACC-6001": {
+      "in_degree": 0.0,
+      "out_degree": 1.0,
+      "weighted_degree": 90000.0,
+      "pagerank": 0.0089713,
+      "betweenness": 0.0
+    },
+    "ACC-6002": {
+      "in_degree": 1.0,
+      "out_degree": 1.0,
+      "weighted_degree": 178000.0,
+      "pagerank": 0.0165969,
+      "betweenness": 0.00056497
+    },
+    "ACC-6003": {
+      "in_degree": 1.0,
+      "out_degree": 1.0,
+      "weighted_degree": 174000.0,
+      "pagerank": 0.02307866,
+      "betweenness": 0.00056497
+    },
+    "ACC-6004": {
+      "in_degree": 1.0,
+      "out_degree": 0.0,
+      "weighted_degree": 86000.0,
+      "pagerank": 0.02858815,
+      "betweenness": 0.0
+    }
+  },
+  "parameters": {
+    "max_nodes": 5000,
+    "betweenness_sample": 64,
+    "settled_only": true,
+    "weighted": true
+  }
+}

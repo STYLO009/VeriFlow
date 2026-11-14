@@ -1,0 +1,32 @@
+{
+  "account_id": "ACC-9001",
+  "exists": true,
+  "window": "5m",
+  "first_seen": 1794634549.182,
+  "last_seen": 1794634690.182,
+  "degrees": {
+    "in_degree": 9,
+    "out_degree": 6,
+    "unique_in": 9,
+    "unique_out": 6
+  },
+  "activity": {
+    "account_id": "ACC-9001",
+    "window": {
+      "start": 1794634399.3439085,
+      "end": 1794634699.3439095,
+      "duration_seconds": 300.0000009536743
+    },
+    "incoming_transactions": 7,
+    "outgoing_transactions": 6,
+    "unique_incoming_accounts": 7,
+    "unique_outgoing_accounts": 6,
+    "incoming_amount": 99750.0,
+    "outgoing_amount": 85500.0,
+    "settled_transactions": 13,
+    "non_settled_transactions": 2
+  },
+  "transaction_count": 15,
+  "settled_amount": 185250.0,
+  "graph_version": 44
+}
