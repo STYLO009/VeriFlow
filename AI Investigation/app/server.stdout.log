@@ -1,0 +1,5 @@
+INFO:     127.0.0.1:61712 - "GET /api/v1/ai/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55838 - "GET /api/v1/ai/providers/status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62822 - "GET /docs HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62822 - "GET /openapi.json HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60112 - "POST /api/v1/ai/investigate HTTP/1.1" 200 OK
